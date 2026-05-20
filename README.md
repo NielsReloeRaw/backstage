@@ -10,7 +10,6 @@ cd C:\Claude\Backstage
 
 # Namespace aanmaken + deployen
 helm install backstage Backstage/helm/backstage --namespace backstage --create-namespace
-helm upgrade backstage Backstage/helm/backstage --namespace backstage
 
 # Git
 git init
