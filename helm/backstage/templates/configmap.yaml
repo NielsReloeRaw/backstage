@@ -21,3 +21,8 @@ data:
         guest:
           dangerouslyAllowOutsideDevelopment: true
         {{- end }}
+
+    catalog:
+      locations:
+        - type: url
+          target: https://github.com/nielsreloeraw/backstage/blob/main/backstage/entities/all.yaml
