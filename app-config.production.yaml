@@ -1,0 +1,44 @@
+app:
+  baseUrl: ${BACKSTAGE_BASE_URL}
+
+backend:
+  baseUrl: ${BACKSTAGE_BASE_URL}
+  listen:
+    port: 7007
+    host: 0.0.0.0
+  cors:
+    origin: ${BACKSTAGE_BASE_URL}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: better-sqlite3
+    connection:
+      directory: /tmp/backstage-db
+
+# Optioneel: vervang SQLite door PostgreSQL
+# database:
+#   client: pg
+#   connection:
+#     host: ${POSTGRES_HOST}
+#     port: ${POSTGRES_PORT}
+#     user: ${POSTGRES_USER}
+#     password: ${POSTGRES_PASSWORD}
+#     database: backstage
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+auth:
+  environment: production
+  providers:
+    github:
+      production:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+catalog:
+  rules:
+    - allow: [Component, System, API, Group, User, Resource, Location, Template, Domain]
+  locations: []

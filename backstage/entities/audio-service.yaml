@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1beta1
+kind: Component
+metadata:
+  name: audio-service
+  description: Service for handling audio
+spec:
+  type: service
+  lifecycle: production
+  owner: guests

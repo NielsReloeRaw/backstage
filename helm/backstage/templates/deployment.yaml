@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "backstage.fullname" . }}
+  labels:
+    {{- include "backstage.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "backstage.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "backstage.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.persistence.enabled }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 1000:1000 {{ .Values.persistence.mountPath }}"]
+          volumeMounts:
+            - name: db
+              mountPath: {{ .Values.persistence.mountPath }}
+      {{- end }}
+      containers:
+        - name: backstage
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 7007
+              protocol: TCP
+          env:
+            - name: BACKSTAGE_BASE_URL
+              value: {{ .Values.env.BACKSTAGE_BASE_URL | quote }}
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "backstage.fullname" . }}
+                  key: GITHUB_TOKEN
+            - name: AUTH_GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "backstage.fullname" . }}
+                  key: AUTH_GITHUB_CLIENT_ID
+            - name: AUTH_GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "backstage.fullname" . }}
+                  key: AUTH_GITHUB_CLIENT_SECRET
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          args:
+            - node
+            - packages/backend
+            - --config
+            - app-config.yaml
+            - --config
+            - app-config.production.yaml
+            - --config
+            - /app/config/app-config.cluster.yaml
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: cluster-config
+              mountPath: /app/config
+            {{- if .Values.persistence.enabled }}
+            - name: db
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- end }}
+      volumes:
+        - name: cluster-config
+          configMap:
+            name: {{ include "backstage.fullname" . }}-config
+        {{- if .Values.persistence.enabled }}
+        - name: db
+          persistentVolumeClaim:
+            claimName: {{ include "backstage.fullname" . }}-db
+        {{- end }}

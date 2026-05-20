@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1beta1
+kind: Component
+metadata:
+  name: auth-service
+  description: Handles authentication
+spec:
+  type: service
+  lifecycle: production
+  owner: auth

@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1beta1
+kind: Component
+metadata:
+  name: video-service
+  description: Service for handling video
+spec:
+  type: service
+  lifecycle: production
+  owner: guests

@@ -1,0 +1,18 @@
+backstage/entities/all.yaml
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: all-entities
+spec:
+  targets:
+    - ./groups.yaml
+    - ./systems.yaml
+    - ./user.yaml
+    - ./user-db.yaml
+    - ./user-service.yaml
+    - ./user-profile.yaml
+    - ./auth-service.yaml
+    - ./audio-service.yaml
+    - ./video-service.yaml
+    - ./content-review.yaml
+    - ./file-upload-service.yaml

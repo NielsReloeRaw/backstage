@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1beta1
+kind: Component
+metadata:
+  name: content-review
+  description: Service for reviewing content
+spec:
+  type: service
+  lifecycle: production
+  owner: guests

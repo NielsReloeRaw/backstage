@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: File-management
+  description: Handles all file processing
+spec:
+  owner: content
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: identity-management
+  description: Handles all authentication and authorization
+spec:
+  owner: auth
