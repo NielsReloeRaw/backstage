@@ -26,3 +26,5 @@ data:
       locations:
         - type: url
           target: https://github.com/nielsreloeraw/backstage/blob/main/backstage/entities/all.yaml
+        - type: url
+          target: https://github.com/nielsreloeraw/backstage/blob/main/backstage/templates/all.yaml
